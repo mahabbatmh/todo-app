@@ -60,8 +60,8 @@ export const TodoList = ({ addSelectedTask }) => {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell width={150}>Title</TableCell>
-            <TableCell width={400}>Description</TableCell>
+            <TableCell width={300}>Title</TableCell>
+            <TableCell width={200}>Assignee</TableCell>
             <TableCell>
               <TableSortLabel
                 active={sortBy === "startingDate"}
@@ -110,7 +110,7 @@ export const TodoList = ({ addSelectedTask }) => {
               <TableCell component="th" scope="row">
                 {todo.title}
               </TableCell>
-              <TableCell>{todo.description}</TableCell>
+              <TableCell>{todo.assignee}</TableCell>
               <TableCell>
                 {moment(todo.startingDate).format(DATE_FORMAT)}
               </TableCell>
