@@ -1,4 +1,5 @@
-import { ADD_TODO, UPDATE_TODO_LIST, UPDATE_TODO } from "../actions/todo";
+import { ADD_TODO, UPDATE_TODO_LIST, UPDATE_TODO, UPDATE_TODO_LIST_SORTING } from "../actions/todo";
+import { sortTodoList } from "../utils";
 
 const deafultState = {
     list: [
@@ -32,7 +33,11 @@ const deafultState = {
             startingDate: '2020-08-11',
             assignee: 'Mahabbat Huseynov'
         }
-    ]
+    ],
+    sorting: {
+        sortBy: 'status',
+        direction: 'asc',
+    }
 }
 
 export default function reducer(state=deafultState, { type, payload }) {
@@ -40,15 +45,20 @@ export default function reducer(state=deafultState, { type, payload }) {
         case ADD_TODO:
             return {
                 ...state,
-                list: [
+                list: sortTodoList([
                     ...state.list,
                     payload
-                ]
+                ], state.sorting.sortBy, state.sorting.direction),
             }
         case UPDATE_TODO_LIST: 
             return {
                 ...state,
                 list: payload
+            }
+        case UPDATE_TODO_LIST_SORTING:
+            return {
+                ...state,
+                sorting: payload,
             }
         case UPDATE_TODO:
             return {

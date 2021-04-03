@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
@@ -17,7 +17,7 @@ import moment from "moment";
 import { TaskStatusBadge } from "../components/StatusBadge";
 import { TaskPriorityBadge } from "../components/PriorityBadge";
 import { DATE_FORMAT } from "../consts";
-import { updateTodoList } from "../actions/todo";
+import { updateTodoList, updateTodoListSorting } from "../actions/todo";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,20 +38,29 @@ const useStyles = makeStyles((theme) => ({
 
 export const TodoList = ({ addSelectedTask }) => {
   const classes = useStyles();
-  const [sortBy, changeSortBy] = useState("status");
-  const [direction, changeDirection] = useState("asc");
   const todoList = useSelector((state) => state.todo.list);
+  const { sortBy, direction } = useSelector((state) => state.todo.sorting);
   const dispatch = useDispatch();
+
+  const updateSortingAction = (sorting) =>
+    dispatch(updateTodoListSorting(sorting));
 
   const handleSort = (fieldName) => {
     if (fieldName === sortBy) {
       const newDirection = direction === "asc" ? "desc" : "asc";
       dispatch(updateTodoList(sortTodoList(todoList, fieldName, newDirection)));
-      changeDirection(newDirection);
+      updateSortingAction({
+        sortBy,
+        direction: newDirection,
+      });
     } else {
       dispatch(updateTodoList(sortTodoList(todoList, fieldName, "asc")));
-      changeSortBy(fieldName);
-      changeDirection("asc");
+      dispatch(
+        updateSortingAction({
+          sortBy: fieldName,
+          direction: "asc",
+        })
+      );
     }
   };
 
